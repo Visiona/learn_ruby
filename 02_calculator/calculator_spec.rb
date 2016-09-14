@@ -80,11 +80,11 @@ end
 describe "multiply" do
 
   it "multiplies two numbers" do 
-    expect(multiply(4,8)).to eq(32)
+    expect(multiply([4,8])).to eq(32)
   end
 
   it "multiplies several numbers" do 
-    expect(multiply(2,11,21)).to eq(432)
+    expect(multiply([2,11,21])).to eq(462)
   end
   
 end
