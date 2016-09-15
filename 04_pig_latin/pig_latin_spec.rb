@@ -68,5 +68,9 @@ describe "#translate" do
   # Test-driving bonus:
   # * write a test asserting that capitalized words are still capitalized (but with a different initial capital letter, of course)
   # * retain the punctuation from the original phrase
+  it "capitalized words are still capitalized, but with the new capital letter" do
+    s = translate("The Very Best of Tina")
+    expect(s).to eq("Ethay Eryvay Estbay ofay Inatay")
+  end
 
 end
