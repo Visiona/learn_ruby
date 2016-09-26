@@ -1,7 +1,7 @@
 class Fixnum
 
   def in_words
-    numbers_words = {
+    @@numbers_words = {
       0 => "",
       1 => "one",
       2 => "two",
@@ -37,38 +37,39 @@ class Fixnum
       1_000_000_000_000 => "trillion"
     }
 
-    no_in_words = ""
-    if self < 0
-      puts "No results for negative numbers"
-    elsif self == 0
-      no_in_words = "zero"
-    else
-      thousands(self)
-    end
-
-    def thousands(no_in_progress)
-      if no_in_progress < 1000
+    def thousands(number)
+      if number < 1000
+        no_in_progress = number
         if no_in_progress/100 >= 1 # 999%100 gives 9 so greater than one
-          no_in_words += numbers_words[no_in_progress/100] + " " + numbers_words[100]
+          no_in_words += @@numbers_words[no_in_progress/100] + " " + @@numbers_words[100]
           no_in_words += " " if no_in_progress%100 > 0
           no_in_progress = no_in_progress%100 #no_in_progress now equals 99
         end
         if no_in_progress > 20
-          no_in_words += numbers_words[no_in_progress - no_in_progress%10]
-          no_in_words += " " + numbers_words[no_in_progress%10] if no_in_progress%10 > 0 
+          no_in_words += @@numbers_words[no_in_progress - no_in_progress%10]
+          no_in_words += " " + @@numbers_words[no_in_progress%10] if no_in_progress%10 > 0 
         elsif no_in_progress <= 20
-          no_in_words += numbers_words[no_in_progress]
+          no_in_words += @@numbers_words[no_in_progress]
         end
-      elsif no_in_progress/1_000_000_000_000 > 0
-        tousands(x/1_000_000_000_000) + "trillion"
-      elsif no_in_progress/1_000_000_000 > 0
-        tousands(x/1_000_000_000) + "billion"
-      elsif no_in_progress/1_000_000 > 0
-        tousands(x/1_000_000) + "million"
-      elsif no_in_progress/1_000 > 0
-        tousands(x/1_000) + "thousand"
+      elsif number/1_000_000_000_000 > 0
+        thousands(number%1_000_000_000_000) + " trillion"
+      elsif number/1_000_000_000 > 0
+        thousands(number%1_000_000_000) + " billion"
+      elsif number/1_000_000 > 0
+        thousands(number%1_000_000) + " million"
+      elsif number/1_000 > 0
+        thousands(number%1_000) + " thousand"
       end
       no_in_words
     end
+
+    if self < 0
+      puts "No results for negative numbers"
+    elsif self == 0
+      "zero"
+    else
+      thousands(self)
+    end
+    
   end
 end
