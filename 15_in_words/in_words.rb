@@ -42,25 +42,33 @@ class Fixnum
       puts "No results for negative numbers"
     elsif self == 0
       no_in_words = "zero"
-    elsif self > 1_000_000_000_000
-      tousands(self)
+    else
+      thousands(self)
     end
 
-    def tousands(x)
-      no_in_progress = self
-      if no_in_progress/100 >= 1 # 999%100 gives 9 so greater than one
-        no_in_words += numbers_words[no_in_progress/100] + " " + numbers_words[100]
-        no_in_words += " " if no_in_progress%100 > 0
-        no_in_progress = no_in_progress%100 #no_in_progress now equals 99
-      end
-      if no_in_progress > 20
-        no_in_words += numbers_words[no_in_progress - no_in_progress%10]
-        no_in_words += " " + numbers_words[no_in_progress%10] if no_in_progress%10 > 0 
-      elsif no_in_progress <= 20
-        no_in_words += numbers_words[no_in_progress]
+    def thousands(no_in_progress)
+      if no_in_progress < 1000
+        if no_in_progress/100 >= 1 # 999%100 gives 9 so greater than one
+          no_in_words += numbers_words[no_in_progress/100] + " " + numbers_words[100]
+          no_in_words += " " if no_in_progress%100 > 0
+          no_in_progress = no_in_progress%100 #no_in_progress now equals 99
+        end
+        if no_in_progress > 20
+          no_in_words += numbers_words[no_in_progress - no_in_progress%10]
+          no_in_words += " " + numbers_words[no_in_progress%10] if no_in_progress%10 > 0 
+        elsif no_in_progress <= 20
+          no_in_words += numbers_words[no_in_progress]
+        end
+      elsif no_in_progress/1_000_000_000_000 > 0
+        tousands(x/1_000_000_000_000) + "trillion"
+      elsif no_in_progress/1_000_000_000 > 0
+        tousands(x/1_000_000_000) + "billion"
+      elsif no_in_progress/1_000_000 > 0
+        tousands(x/1_000_000) + "million"
+      elsif no_in_progress/1_000 > 0
+        tousands(x/1_000) + "thousand"
       end
       no_in_words
     end
-
   end
 end
