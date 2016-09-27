@@ -1,8 +1,9 @@
 class Fixnum
 
-  def in_words
-    @@numbers_words = {
-      0 => "",
+  def in_words(counter=0)
+
+    numbers_words = {
+      0 => "zero",
       1 => "one",
       2 => "two",
       3 => "three",
@@ -36,41 +37,28 @@ class Fixnum
       1_000_000_000 => "billion",
       1_000_000_000_000 => "trillion"
     }
-
-    def thousands(number)
-      if number < 1000
-        no_in_progress = number
-        if no_in_progress/100 >= 1 # 999%100 gives 9 so greater than one
-          @@no_in_words += @@numbers_words[no_in_progress/100] + " " + @@numbers_words[100]
-          @@no_in_words += " " if no_in_progress%100 > 0
-          no_in_progress = no_in_progress%100 #no_in_progress now equals 99
-        end
-        if no_in_progress > 20
-          @@no_in_words += @@numbers_words[no_in_progress - no_in_progress%10]
-          @@no_in_words += " " + @@numbers_words[no_in_progress%10] if no_in_progress%10 > 0 
-        elsif no_in_progress <= 20
-          @@no_in_words += @@numbers_words[no_in_progress]
-        end
-      elsif number/1_000_000_000_000 > 0
-        thousands(number%1_000_000_000_000) + " trillion"
-      elsif number/1_000_000_000 > 0
-        thousands(number%1_000_000_000) + " billion"
-      elsif number/1_000_000 > 0
-        thousands(number%1_000_000) + " million"
-      elsif number/1_000 > 0
-        thousands(number%1_000) + " thousand"
-      end
-      @@no_in_words
-    end
-
-    @@no_in_words = ""
+    
     if self < 0
       puts "No results for negative numbers"
     elsif self == 0
-      "zero"
+      numbers_words[0]
     else
-      thousands(self)
+      no_in_progress = self
+      phrase = ""
+      if no_in_progress/100 >= 1 && no_in_progress/100 < 10 # 999/100 gives 9 so greater than one
+        phrase += numbers_words[no_in_progress/100] + " " + numbers_words[100]
+        phrase += " " if no_in_progress%100 > 0
+        no_in_progress = no_in_progress%100 #no_in_progress now equals 99
+      end
+      if no_in_progress > 20 && no_in_progress < 100
+        phrase += numbers_words[no_in_progress - no_in_progress%10]
+        phrase += " " + numbers_words[no_in_progress%10] if no_in_progress%10 > 0 
+      elsif no_in_progress <= 20 && no_in_progress > 0
+        phrase += numbers_words[no_in_progress]
+      end
+      higher_phrase = (self / 1000).in_words(counter + 1) if self >= 1000
+      suffix = numbers_words[1000**counter] if counter > 0
+      "#{higher_phrase} #{phrase} #{suffix}".strip
     end
-    
   end
 end
