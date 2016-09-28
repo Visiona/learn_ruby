@@ -43,7 +43,8 @@ class Fixnum
     elsif self == 0
       numbers_words[0]
     else
-      no_in_progress = self
+      no_in_progress = self.divmod(1000)
+      no_in_progress = no_in_progress[1]
       phrase = ""
       if no_in_progress/100 >= 1 && no_in_progress/100 < 10 # 999/100 gives 9 so greater than one
         phrase += numbers_words[no_in_progress/100] + " " + numbers_words[100]
@@ -57,8 +58,12 @@ class Fixnum
         phrase += numbers_words[no_in_progress]
       end
       higher_phrase = (self / 1000).in_words(counter + 1) if self >= 1000
-      suffix = numbers_words[1000**counter] if counter > 0
+      suffix = numbers_words[1000**counter] if counter > 0 && phrase != ""
+      puts "DBG: suffix = #{suffix.inspect}"
       "#{higher_phrase} #{phrase} #{suffix}".strip
     end
   end
 end
+
+
+
